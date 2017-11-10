@@ -46,6 +46,7 @@ public class Validator implements  HttpHandler {
         exchange.sendResponseHeaders(200, str3.length());
         OutputStream out = exchange.getResponseBody();
         out.write(str3.getBytes());
+        out.flush();
         out.close();
     }
 
