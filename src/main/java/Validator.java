@@ -2,9 +2,13 @@ import com.google.gson.*;
 import com.sun.net.httpserver.*;
 import java.io.*;
 
-public class Validator implements  HttpHandler{
+public class Validator implements  HttpHandler {
+
+    private int id = 0;
 
     public void handle(HttpExchange exchange) throws IOException {
+
+        id++;
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
         String str1 = reader.readLine();
@@ -26,7 +30,16 @@ public class Validator implements  HttpHandler{
             Object object = gson.fromJson(str2, Object.class);
             str3 = gson.toJson(object);
         } catch (JsonSyntaxException ex) {
-            str3 = ex.getMessage();
+            JsonObject jObj = new JsonObject();
+            String description = ex.getMessage().split(": ")[1];
+            String message = description.split(" at ")[0];
+            String occur = description.split(" at ")[1];
+            int code = ex.hashCode();
+            jObj.addProperty("id", id);
+            jObj.addProperty("message", message);
+            jObj.addProperty("occur", occur);
+            jObj.addProperty("code", code);
+            str3 = gson.toJson(jObj);
         }
 
         System.out.println(str3);
