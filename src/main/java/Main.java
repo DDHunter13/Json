@@ -9,7 +9,7 @@ public class Main {
 
         try {
             HttpServer serv = HttpServer.create();
-            serv.bind(new InetSocketAddress(8080), 0);
+            serv.bind(new InetSocketAddress(80), 0);
             serv.createContext("/", new Validator());
             serv.start();
         } catch (IOException e) {
